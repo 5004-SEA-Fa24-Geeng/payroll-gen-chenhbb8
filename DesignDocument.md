@@ -7,7 +7,77 @@ This document is meant to provide a tool for you to demonstrate the design proce
 ## (INITIAL DESIGN): Class Diagram
 
 Place your class diagram below. Make sure you check the fil in the browser on github.com to make sure it is rendering correctly. If it is not, you will need to fix it. As a reminder, here is a link to tools that can help you create a class diagram: [Class Resources: Class Design Tools](https://github.com/CS5004-khoury-lionelle/Resources?tab=readme-ov-file#uml-design-tools)
+```mermaid
+---
+title: Class Diagram
+---
+classDiagram
+class IEmployee {
++String getName()
++String getID()
++double getPayRate()
++String getEmployeeType()
++double getYTDEarnings()
++double getYTDTaxesPaid()
++double getPretaxDeductions()
++IPayStub runPayroll(double hoursWorked)
++String toCSV()
+}
 
+    class IPayStub {
+        +double getPay()
+        +double getTaxesPaid()
+        +String toCSV()
+    }
+
+    class ITimeCard {
+        +String getEmployeeID()
+        +double getHoursWorked()
+    }
+
+    class HourlyEmployee {
+        -String name
+        -String id
+        -double payRate
+        -double ytdEarnings
+        -double ytdTaxesPaid
+        -double pretaxDeductions
+        +runPayroll(double hoursWorked)
+        +toCSV()
+    }
+
+    class SalaryEmployee {
+        -String name
+        -String id
+        -double payRate
+        -double ytdEarnings
+        -double ytdTaxesPaid
+        -double pretaxDeductions
+        +runPayroll(double hoursWorked)
+        +toCSV()
+    }
+
+    class PayStub {
+        -String employeeName
+        -double netPay
+        -double taxes
+        -double ytdEarnings
+        -double ytdTaxesPaid
+        +toCSV()
+    }
+
+    class TimeCard {
+        -String employeeID
+        -double hoursWorked
+    }
+
+    IEmployee <|-- HourlyEmployee
+    IEmployee <|-- SalaryEmployee
+    IPayStub <|-- PayStub
+    ITimeCard <|-- TimeCard
+    HourlyEmployee --> PayStub
+    SalaryEmployee --> PayStub
+```
 
 
 
@@ -29,7 +99,20 @@ You should feel free to number your brainstorm.
 1. Test that the `Employee` class properly returns `name` from `getName()`
 2. Test that the `Employee` class properly returns `id` from `getId()`
 3. continue to add your brainstorm here (you don't need to super formal - this is a brainstorm) - yes, you can change the bullets above to something that fits your design.
+   Test that the HourlyEmployee class properly returns name using getName().
 
+    * Test that the `HourlyEmployee` class properly returns `name` using `getName()`
+    * Test that the `HourlyEmployee` class properly returns `id` using `getID()`
+    * Test that the `SalaryEmployee` class correctly calculates payroll using `runPayroll()` with valid hours.
+    * Test that the `HourlyEmployee` calculates overtime pay correctly when hours exceed 40.
+    * Test that the `runPayroll()` method correctly skips payroll for negative hours
+    * Test that the `PayStub` class returns the correct net pay, taxes, YTD earnings, and YTD taxes paid.
+    * Test that the `Builder` class accurately converts CSV data into `IEmployee` objects.
+    * Test that the `Builder` class accurately converts CSV data into `ITimeCard` objects
+    * Test that `FileUtil.readFileToList()` correctly reads file content and skips the header line.
+    * Test that `FileUtil.writeFile()` successfully writes data to a file and handles backups appropriately.
+    * Test that `PayrollGenerator` correctly matches employees to time cards and generates pay stubs.
+    * Test edge cases like zero hours worked, maximum integer limits, and invalid CSV formatting.
 
 
 ## (FINAL DESIGN): Class Diagram
