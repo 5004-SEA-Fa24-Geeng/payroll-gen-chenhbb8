@@ -1,8 +1,8 @@
-employee_name,employee_id,net_pay,taxes_paid,ytd_earnings,ytd_taxes_paid
-Luffy,s192,1044.22,305.78,24656.72,5804.06
-Nami,s193,5672.33,1661.00,42367.32,11627.00
-Light Yagami,x101,773.50,226.50,13320.50,3171.00
-Misa Amane,x102,4447.63,1302.38,31592.89,8709.52
-Edward Elric,f103,3029.54,887.13,24255.29,5881.52
-Eren Yeager,a105,541.45,158.55,8324.35,1993.20
-Mikasa Ackerman,a106,3635.45,1064.55,25906.35,6591.20
+employee_type,employee_name,employee_id,net_pay,taxes_paid,ytd_earnings,ytd_taxes_paid
+HOURLY,Luffy,s192,1044.23,305.78,26006.72,6109.84
+SALARY,Nami,s193,5672.33,1661.00,50700.65,13288.00
+HOURLY,Light Yagami,x101,773.50,226.50,14320.50,3397.50
+SALARY,Misa Amane,x102,4447.63,1302.38,37842.89,10011.90
+SALARY,Edward Elric,f103,3029.54,887.13,28421.96,6768.65
+HOURLY,Eren Yeager,a105,541.45,158.55,9024.35,2151.75
+SALARY,Mikasa Ackerman,a106,3635.45,1064.55,30906.35,7655.75
