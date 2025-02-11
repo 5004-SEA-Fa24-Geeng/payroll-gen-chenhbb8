@@ -5,12 +5,25 @@ package student;
  */
 public class PayStub implements IPayStub {
 
+    /** The employee's name. */
     private final String employeeName;
+
+    /** The employee's ID. */
     private final String employeeId;
-    private final String employeeType; // Added employeeType
+
+    /** The employee's type (HOURLY or SALARY). */
+    private final String employeeType;
+
+    /** The employee's net pay. */
     private final double netPay;
+
+    /** The amount of taxes paid. */
     private final double taxesPaid;
+
+    /** The employee's year-to-date earnings. */
     private final double ytdEarnings;
+
+    /** The employee's year-to-date taxes paid. */
     private final double ytdTaxesPaid;
 
     /**
@@ -28,7 +41,7 @@ public class PayStub implements IPayStub {
                    double netPay, double taxesPaid, double ytdEarnings, double ytdTaxesPaid) {
         this.employeeName = employeeName;
         this.employeeId = employeeId;
-        this.employeeType = employeeType;  // Initialize employeeType
+        this.employeeType = employeeType;
         this.netPay = netPay;
         this.taxesPaid = taxesPaid;
         this.ytdEarnings = ytdEarnings;
@@ -46,7 +59,7 @@ public class PayStub implements IPayStub {
     }
 
     /**
-     * Converts pay stub details to CSV format, including the employee type.
+     * Converts pay stub details to CSV format.
      *
      * @return A CSV string representing the pay stub
      */

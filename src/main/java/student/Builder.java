@@ -1,5 +1,4 @@
 package student;
-import student.TimeCard;
 
 /**
  * A utility class to build employee and time card objects from CSV strings.
@@ -14,8 +13,6 @@ public final class Builder {
 
     /**
      * Builds an employee object from a CSV string.
-     *
-     * CSV Format: employee_type,employee_name,employee_id,pay_rate,pretax_deductions,ytd_earnings,ytd_taxes_paid
      *
      * @param csv The CSV string containing employee details
      * @return An IEmployee object (either HourlyEmployee or SalaryEmployee), or null if invalid
@@ -46,16 +43,14 @@ public final class Builder {
                 return new SalaryEmployee(name, id, payRate, ytdEarnings, ytdTaxesPaid, pretaxDeductions);
             }
         } catch (NumberFormatException e) {
-            return null; // Invalid number format in CSV
+            return null;
         }
 
-        return null; // Unsupported employee type
+        return null;
     }
 
     /**
      * Converts a CSV string to a TimeCard object.
-     *
-     * CSV Format: employee_id,hours_worked
      *
      * @param csv The CSV string containing time card details
      * @return An ITimeCard object, or null if invalid
@@ -77,7 +72,7 @@ public final class Builder {
 
             return new TimeCard(employeeId, hoursWorked);
         } catch (NumberFormatException e) {
-            return null; // Invalid number format in CSV
+            return null;
         }
     }
 }

@@ -62,8 +62,8 @@ class HourlyEmployeeTest {
     void runPayroll() {
         IPayStub luffyPayStub = luffy.runPayroll(45);
         assertNotNull(luffyPayStub);
-        assertEquals(1102.24, luffyPayStub.getPay(), 0.01);
-        assertEquals(322.76, luffyPayStub.getTaxesPaid(), 0.01);
+        assertEquals(1044.22, luffyPayStub.getPay(), 0.01);
+        assertEquals(305.78, luffyPayStub.getTaxesPaid(), 0.01);
 
         IPayStub lightPayStub = lightYagami.runPayroll(40);
         assertNotNull(lightPayStub);

@@ -81,6 +81,7 @@ public class HourlyEmployee implements IEmployee {
         return this.pretaxDeductions;
     }
 
+
     @Override
     public IPayStub runPayroll(double hoursWorked) {
         if (hoursWorked < 0) {
@@ -92,15 +93,17 @@ public class HourlyEmployee implements IEmployee {
         double taxes = taxableIncome * 0.2265;
         double netPay = taxableIncome - taxes;
 
-        BigDecimal netPayRounded = BigDecimal.valueOf(netPay).setScale(2, RoundingMode.HALF_UP);
-        BigDecimal taxesRounded = BigDecimal.valueOf(taxes).setScale(2, RoundingMode.HALF_UP);
+        // Round net pay and taxes to 2 decimal places
+        netPay = Math.round(netPay * 100.0) / 100.0;
+        taxes = Math.round(taxes * 100.0) / 100.0;
 
-        ytdEarnings += grossPay;
-        ytdTaxesPaid += taxesRounded.doubleValue();
 
-        return new PayStub(name, id, getEmployeeType(), netPayRounded.doubleValue(),
-                taxesRounded.doubleValue(), ytdEarnings, ytdTaxesPaid);
+        ytdEarnings += netPay;
+        ytdTaxesPaid += taxes;
+
+        return new PayStub(name, id, getEmployeeType(), netPay, taxes, ytdEarnings, ytdTaxesPaid);
     }
+
 
     @Override
     public String toCSV() {

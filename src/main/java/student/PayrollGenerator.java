@@ -80,7 +80,10 @@ public final class PayrollGenerator {
                 .map(IPayStub::toCSV)
                 .collect(Collectors.toList());
 
-        payStubLines.add(0, "employee_type,employee_name,employee_id,net_pay,taxes_paid,ytd_earnings,ytd_taxes_paid");
+        payStubLines.add(0,
+                "employee_type,employee_name,employee_id,net_pay,"
+                        + "taxes_paid,ytd_earnings,ytd_taxes_paid");
+
 
         FileUtil.writeFile(arguments.getPayrollFile(), payStubLines);
     }

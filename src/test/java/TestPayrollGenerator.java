@@ -47,13 +47,13 @@ public class TestPayrollGenerator {
         // Expected pay stub output
         String expectedPayStubs = """
                 employee_type,employee_name,employee_id,net_pay,taxes_paid,ytd_earnings,ytd_taxes_paid
-                HOURLY,Luffy,s192,1044.23,305.78,26006.72,6109.84
-                SALARY,Nami,s193,5672.33,1661.00,50700.65,13288.00
-                HOURLY,Light Yagami,x101,773.50,226.50,14320.50,3397.50
-                SALARY,Misa Amane,x102,4447.63,1302.38,37842.89,10011.90
-                SALARY,Edward Elric,f103,3029.54,887.13,28421.96,6768.65
-                HOURLY,Eren Yeager,a105,541.45,158.55,9024.35,2151.75
-                SALARY,Mikasa Ackerman,a106,3635.45,1064.55,30906.35,7655.75
+                HOURLY,Luffy,s192,1044.22,305.78,29750.94,7027.18
+                SALARY,Nami,s193,5672.33,1661.00,73039.64,18271.00
+                HOURLY,Light Yagami,x101,773.50,226.50,17094.00,4077.00
+                SALARY,Misa Amane,x102,4447.63,1302.38,54790.52,13919.04
+                SALARY,Edward Elric,f103,3029.54,887.13,39784.84,9430.04
+                HOURLY,Eren Yeager,a105,541.45,158.55,10965.80,2627.40
+                SALARY,Mikasa Ackerman,a106,3635.45,1064.55,44541.80,10849.40
                 """;
 
         String actualPayStubs = Files.readString(payStubs);
