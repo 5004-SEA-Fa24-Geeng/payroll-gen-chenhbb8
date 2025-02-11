@@ -1,8 +1,5 @@
 package student;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 /**
  * Represents an hourly employee with payroll and tax details.
  */
@@ -81,7 +78,12 @@ public class HourlyEmployee implements IEmployee {
         return this.pretaxDeductions;
     }
 
-
+    /**
+     * Runs payroll for the employee based on hours worked.
+     *
+     * @param hoursWorked The number of hours worked
+     * @return The generated pay stub
+     */
     @Override
     public IPayStub runPayroll(double hoursWorked) {
         if (hoursWorked < 0) {
@@ -97,14 +99,17 @@ public class HourlyEmployee implements IEmployee {
         netPay = Math.round(netPay * 100.0) / 100.0;
         taxes = Math.round(taxes * 100.0) / 100.0;
 
-
         ytdEarnings += netPay;
         ytdTaxesPaid += taxes;
 
         return new PayStub(name, id, getEmployeeType(), netPay, taxes, ytdEarnings, ytdTaxesPaid);
     }
 
-
+    /**
+     * Converts employee details to a CSV string.
+     *
+     * @return The CSV representation of the employee
+     */
     @Override
     public String toCSV() {
         return String.format("HOURLY,%s,%s,%.2f,%.2f,%.2f,%.2f",

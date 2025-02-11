@@ -72,7 +72,8 @@ public final class PayrollGenerator {
                 .map(IEmployee::toCSV)
                 .collect(Collectors.toList());
 
-        employeeCSV.add(0, "employee_type,employee_name,employee_id,pay_rate,pretax_deductions,ytd_earnings,ytd_taxes_paid");
+        employeeCSV.add(0, "employee_type,employee_name,employee_id,pay_rate,"
+                +"pretax_deductions,ytd_earnings,ytd_taxes_paid");
         FileUtil.writeFile(arguments.getEmployeeFile(), employeeCSV);
 
         List<String> payStubLines = payStubs.stream()
