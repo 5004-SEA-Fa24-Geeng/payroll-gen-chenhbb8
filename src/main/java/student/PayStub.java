@@ -5,22 +5,12 @@ package student;
  */
 public class PayStub implements IPayStub {
 
-    /** The employee's name. */
     private final String employeeName;
-
-    /** The employee's ID. */
     private final String employeeId;
-
-    /** The employee's net pay after deductions. */
+    private final String employeeType; // Added employeeType
     private final double netPay;
-
-    /** The amount of taxes paid by the employee. */
     private final double taxesPaid;
-
-    /** The employee's year-to-date earnings. */
     private final double ytdEarnings;
-
-    /** The employee's year-to-date taxes paid. */
     private final double ytdTaxesPaid;
 
     /**
@@ -28,49 +18,41 @@ public class PayStub implements IPayStub {
      *
      * @param employeeName  The employee's name
      * @param employeeId    The employee's ID
-     * @param netPay        The employee's net pay
+     * @param employeeType  The employee's type (e.g., HOURLY, SALARY)
+     * @param netPay        The net pay for the employee
      * @param taxesPaid     The amount of taxes paid
-     * @param ytdEarnings   The year-to-date earnings
-     * @param ytdTaxesPaid  The year-to-date taxes paid
+     * @param ytdEarnings   Year-to-date earnings
+     * @param ytdTaxesPaid  Year-to-date taxes paid
      */
-    public PayStub(String employeeName, String employeeId, double netPay, double taxesPaid,
-                   double ytdEarnings, double ytdTaxesPaid) {
+    public PayStub(String employeeName, String employeeId, String employeeType,
+                   double netPay, double taxesPaid, double ytdEarnings, double ytdTaxesPaid) {
         this.employeeName = employeeName;
         this.employeeId = employeeId;
+        this.employeeType = employeeType;  // Initialize employeeType
         this.netPay = netPay;
         this.taxesPaid = taxesPaid;
         this.ytdEarnings = ytdEarnings;
         this.ytdTaxesPaid = ytdTaxesPaid;
     }
 
-    /**
-     * Gets the net pay for the employee.
-     *
-     * @return The employee's net pay
-     */
     @Override
     public double getPay() {
         return netPay;
     }
 
-    /**
-     * Gets the taxes paid by the employee.
-     *
-     * @return The amount of taxes paid
-     */
     @Override
     public double getTaxesPaid() {
         return taxesPaid;
     }
 
     /**
-     * Converts pay stub details to a CSV format.
+     * Converts pay stub details to CSV format, including the employee type.
      *
      * @return A CSV string representing the pay stub
      */
     @Override
     public String toCSV() {
-        return String.format("%s,%s,%.2f,%.2f,%.2f,%.2f",
-                employeeName, employeeId, netPay, taxesPaid, ytdEarnings, ytdTaxesPaid);
+        return String.format("%s,%s,%s,%.2f,%.2f,%.2f,%.2f",
+                employeeType, employeeName, employeeId, netPay, taxesPaid, ytdEarnings, ytdTaxesPaid);
     }
 }

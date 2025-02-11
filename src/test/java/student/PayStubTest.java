@@ -1,39 +1,57 @@
 package student;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+/**
+ * Test class for verifying the functionality of the PayStub class.
+ */
 class PayStubTest {
 
-    private PayStub luffyPayStub;
-    private PayStub namiPayStub;
+    private PayStub payStub;
 
+    /**
+     * Sets up a PayStub instance before each test.
+     */
     @BeforeEach
     void setUp() {
-        luffyPayStub = new PayStub("Luffy", "s192", 1031.31, 301.69, 21031.31, 4831.69);
-        namiPayStub = new PayStub("Nami", "s193", 1500.00, 400.00, 18517.00, 5383.00);
+        payStub = new PayStub("Luffy", "s192", "HOURLY",
+                1102.24, 322.76, 21102.24, 4852.76);
     }
 
+    /**
+     * Tests the getPay method to ensure it returns the correct net pay.
+     */
     @Test
     void getPay() {
-        assertEquals(1031.31, luffyPayStub.getPay(), 0.01);
-        assertEquals(1500.00, namiPayStub.getPay(), 0.01);
+        double expectedNetPay = 1102.24;
+        assertEquals(expectedNetPay, payStub.getPay(),
+                "Net pay does not match the expected value.");
     }
 
+    /**
+     * Tests the getTaxesPaid method to ensure it returns the correct taxes paid.
+     */
     @Test
     void getTaxesPaid() {
-        assertEquals(301.69, luffyPayStub.getTaxesPaid(), 0.01);
-        assertEquals(400.00, namiPayStub.getTaxesPaid(), 0.01);
+        double expectedTaxesPaid = 322.76;
+        assertEquals(expectedTaxesPaid, payStub.getTaxesPaid(),
+                "Taxes paid do not match the expected value.");
     }
 
+    /**
+     * Tests the toCSV method to ensure it returns the correct CSV format, including the employee type.
+     */
     @Test
     void toCSV() {
-        String expectedLuffyCSV = "Luffy,s192,1031.31,301.69,21031.31,4831.69";
-        String expectedNamiCSV = "Nami,s193,1500.00,400.00,18517.00,5383.00";
+        String expectedCSV = "HOURLY,Luffy,s192,1102.24,322.76,21102.24,4852.76";
+        String actualCSV = payStub.toCSV();
 
-        assertEquals(expectedLuffyCSV, luffyPayStub.toCSV());
-        assertEquals(expectedNamiCSV, namiPayStub.toCSV());
+        assertNotNull(actualCSV, "CSV output should not be null.");
+        assertEquals(expectedCSV, actualCSV,
+                "CSV output does not match the expected format.");
     }
 }

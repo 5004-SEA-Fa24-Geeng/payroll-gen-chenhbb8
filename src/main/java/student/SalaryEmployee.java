@@ -8,34 +8,13 @@ import java.math.RoundingMode;
  */
 public class SalaryEmployee implements IEmployee {
 
-    /** The employee's name. */
     private String name;
-
-    /** The employee's ID. */
     private String id;
-
-    /** The employee's annual salary. */
     private double payRate;
-
-    /** Year-to-date earnings for the employee. */
     private double ytdEarnings;
-
-    /** Year-to-date taxes paid by the employee. */
     private double ytdTaxesPaid;
-
-    /** Pretax deductions for the employee. */
     private double pretaxDeductions;
 
-    /**
-     * Constructs a SalaryEmployee with provided details.
-     *
-     * @param name              The employee's name
-     * @param id                The employee's ID
-     * @param payRate           The annual salary
-     * @param ytdEarnings       Year-to-date earnings
-     * @param ytdTaxesPaid      Year-to-date taxes paid
-     * @param pretaxDeductions  Pretax deductions
-     */
     public SalaryEmployee(String name, String id, double payRate, double ytdEarnings,
                           double ytdTaxesPaid, double pretaxDeductions) {
         this.name = name;
@@ -81,40 +60,27 @@ public class SalaryEmployee implements IEmployee {
         return this.pretaxDeductions;
     }
 
-    /**
-     * Runs payroll calculations for a salaried employee.
-     *
-     * @param hoursWorked Number of hours worked (ignored for salaried employees)
-     * @return The generated pay stub
-     */
     @Override
     public IPayStub runPayroll(double hoursWorked) {
         if (hoursWorked < 0) {
-            return null;  // Skip invalid entries
+            return null;
         }
 
-        double grossPay = payRate / 24;  // Bi-monthly salary
+        double grossPay = payRate / 24;
         double taxableIncome = Math.max(0, grossPay - pretaxDeductions);
-        double taxes = taxableIncome * 0.2265;  // 22.65% tax rate
+        double taxes = taxableIncome * 0.2265;
         double netPay = taxableIncome - taxes;
 
-        // Round to 2 decimal places
         BigDecimal netPayRounded = BigDecimal.valueOf(netPay).setScale(2, RoundingMode.HALF_UP);
         BigDecimal taxesRounded = BigDecimal.valueOf(taxes).setScale(2, RoundingMode.HALF_UP);
 
-        // Update YTD earnings and taxes
-        ytdEarnings += netPayRounded.doubleValue();
+        ytdEarnings += grossPay;
         ytdTaxesPaid += taxesRounded.doubleValue();
 
-        return new PayStub(name, id, netPayRounded.doubleValue(),
+        return new PayStub(name, id, getEmployeeType(), netPayRounded.doubleValue(),
                 taxesRounded.doubleValue(), ytdEarnings, ytdTaxesPaid);
     }
 
-    /**
-     * Converts employee data to CSV format.
-     *
-     * @return A CSV string representing the employee
-     */
     @Override
     public String toCSV() {
         return String.format("SALARY,%s,%s,%.2f,%.2f,%.2f,%.2f",

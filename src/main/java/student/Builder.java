@@ -1,63 +1,83 @@
 package student;
+import student.TimeCard;
 
 /**
- * This is a static class (essentially functions) that will help you build objects from CSV strings.
- * These objects are then used in the rest of the program. Often these builders are associated
- * with the objects themselves and the concept of a factory, but we placed
- * them here to keep the code clean (and to help guide you).
+ * A utility class to build employee and time card objects from CSV strings.
  */
 public final class Builder {
 
+    /**
+     * Private constructor to prevent instantiation.
+     */
     private Builder() {
     }
 
     /**
      * Builds an employee object from a CSV string.
      *
-     * You may end up checking the type of employee (hourly or salary) by looking at the first
-     * element of the CSV string. Then building an object specific to that type.
+     * CSV Format: employee_type,employee_name,employee_id,pay_rate,pretax_deductions,ytd_earnings,ytd_taxes_paid
      *
-     * @param csv the CSV string
-     * @return the employee object
+     * @param csv The CSV string containing employee details
+     * @return An IEmployee object (either HourlyEmployee or SalaryEmployee), or null if invalid
      */
     public static IEmployee buildEmployeeFromCSV(String csv) {
-        String[] parts = csv.split(",");
-
-        // Validate that we have exactly 7 fields
-        if (parts.length != 7) {
+        if (csv == null || csv.trim().isEmpty()) {
             return null;
         }
 
-        String employeeType = parts[0];
-        String name = parts[1];
-        String id = parts[2];
+        String[] fields = csv.split(",");
+
+        if (fields.length != 7) {
+            return null;
+        }
 
         try {
-            double payRate = Double.parseDouble(parts[3]);
-            double pretaxDeductions = Double.parseDouble(parts[4]);
-            double ytdEarnings = Double.parseDouble(parts[5]);
-            double ytdTaxesPaid = Double.parseDouble(parts[6]);
+            String employeeType = fields[0].trim();
+            String name = fields[1].trim();
+            String id = fields[2].trim();
+            double payRate = Double.parseDouble(fields[3].trim());
+            double pretaxDeductions = Double.parseDouble(fields[4].trim());
+            double ytdEarnings = Double.parseDouble(fields[5].trim());
+            double ytdTaxesPaid = Double.parseDouble(fields[6].trim());
 
-            // Determine employee type and create the corresponding object
-            if (employeeType.equals("HOURLY")) {
+            if ("HOURLY".equalsIgnoreCase(employeeType)) {
                 return new HourlyEmployee(name, id, payRate, ytdEarnings, ytdTaxesPaid, pretaxDeductions);
-            } else if (employeeType.equals("SALARY")) {
+            } else if ("SALARY".equalsIgnoreCase(employeeType)) {
                 return new SalaryEmployee(name, id, payRate, ytdEarnings, ytdTaxesPaid, pretaxDeductions);
-            } else {
-                return null; // Invalid employee type
             }
         } catch (NumberFormatException e) {
-            return null; // Invalid numeric format
+            return null; // Invalid number format in CSV
         }
+
+        return null; // Unsupported employee type
     }
 
     /**
-     * Converts a TimeCard from a CSV String using ITimeCard's fromCSV method.
+     * Converts a CSV string to a TimeCard object.
      *
-     * @param csv csv string
-     * @return a TimeCard object
+     * CSV Format: employee_id,hours_worked
+     *
+     * @param csv The CSV string containing time card details
+     * @return An ITimeCard object, or null if invalid
      */
     public static ITimeCard buildTimeCardFromCSV(String csv) {
-        return ITimeCard.fromCSV(csv); // Simplified using the static method in ITimeCard
+        if (csv == null || csv.trim().isEmpty()) {
+            return null;
+        }
+
+        String[] fields = csv.split(",");
+
+        if (fields.length != 2) {
+            return null;
+        }
+
+        try {
+            String employeeId = fields[0].trim();
+            double hoursWorked = Double.parseDouble(fields[1].trim());
+
+            return new TimeCard(employeeId, hoursWorked);
+        } catch (NumberFormatException e) {
+            return null; // Invalid number format in CSV
+        }
     }
 }

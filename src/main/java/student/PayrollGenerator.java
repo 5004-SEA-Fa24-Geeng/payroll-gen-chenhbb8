@@ -68,19 +68,19 @@ public final class PayrollGenerator {
             }
         }
 
-        employeeLines = employees.stream()
+        List<String> employeeCSV = employees.stream()
                 .map(IEmployee::toCSV)
                 .collect(Collectors.toList());
-        employeeLines.add(0, FileUtil.EMPLOYEE_HEADER);
-        FileUtil.writeFile(arguments.getEmployeeFile(), employeeLines);
+
+        employeeCSV.add(0, "employee_type,employee_name,employee_id,pay_rate,pretax_deductions,ytd_earnings,ytd_taxes_paid");
+        FileUtil.writeFile(arguments.getEmployeeFile(), employeeCSV);
 
         List<String> payStubLines = payStubs.stream()
-                .filter(x -> x != null)
+                .filter(ps -> ps != null)
                 .map(IPayStub::toCSV)
                 .collect(Collectors.toList());
 
-        // Add CSV header
-        payStubLines.add(0, "employee_name,employee_id,net_pay,taxes,ytd_earnings,ytd_taxes_paid");
+        payStubLines.add(0, "employee_type,employee_name,employee_id,net_pay,taxes_paid,ytd_earnings,ytd_taxes_paid");
 
         FileUtil.writeFile(arguments.getPayrollFile(), payStubLines);
     }
@@ -155,11 +155,17 @@ public final class PayrollGenerator {
             Arguments arguments = new Arguments();
             for (int i = 0; i < args.length; i++) {
                 if (args[i].equals("-e")) {
-                    arguments.employeeFile = args[++i];
+                    if (i + 1 < args.length && !args[i + 1].startsWith("-")) {
+                        arguments.employeeFile = args[++i];
+                    }
                 } else if (args[i].equals("-t")) {
-                    arguments.timeCards = args[++i];
+                    if (i + 1 < args.length && !args[i + 1].startsWith("-")) {
+                        arguments.timeCards = args[++i];
+                    }
                 } else if (args[i].equals("-o")) {
-                    arguments.payrollFile = args[++i];
+                    if (i + 1 < args.length && !args[i + 1].startsWith("-")) {
+                        arguments.payrollFile = args[++i];
+                    }
                 } else if (args[i].equals("-h")) {
                     arguments.printHelp();
                     System.exit(0);
