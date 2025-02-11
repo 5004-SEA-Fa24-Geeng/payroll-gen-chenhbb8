@@ -14,7 +14,9 @@ capacity.
   
 Did you use any external resources (you do not have to cite in class material)? (Cite them below)
 
-* one row per resource
+* https://www.ukg.com/blog/payroll/what-payrolls-role-pay-equity?utm_source=chatgpt.com
+* https://www.aauw.org/resources/research/the-stem-gap/?utm_source=chatgpt.com
+* https://www.bamboohr.com/blog/conduct-a-pay-equity-analysis?utm_source=chatgpt.com
 
 
 (Optional) What was your favorite part of the assignment?
