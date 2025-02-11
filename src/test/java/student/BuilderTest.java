@@ -42,7 +42,7 @@ class BuilderTest {
     @Test
     void buildTimeCardFromCSV() {
         ITimeCard timeCard = Builder.buildTimeCardFromCSV(validTimeCardCSV);
-        assertNotNull(timeCard, "Failed to build TimeCard from CSV");
+        assertNotNull(timeCard, "Failed to build TimeCard from CSV using ITimeCard.fromCSV()");
         assertEquals("s192", timeCard.getEmployeeID());
         assertEquals(45, timeCard.getHoursWorked(), 0.01);
     }

@@ -1,17 +1,20 @@
 package student;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class SalaryEmployee implements IEmployee {
     private String name;
     private String id;
-    private double annualSalary;
+    private double payRate;
     private double ytdEarnings;
     private double ytdTaxesPaid;
     private double pretaxDeductions;
 
-    public SalaryEmployee(String name, String id, double annualSalary, double ytdEarnings, double ytdTaxesPaid, double pretaxDeductions) {
+    public SalaryEmployee(String name, String id, double payRate, double ytdEarnings, double ytdTaxesPaid, double pretaxDeductions) {
         this.name = name;
         this.id = id;
-        this.annualSalary = annualSalary;
+        this.payRate = payRate;
         this.ytdEarnings = ytdEarnings;
         this.ytdTaxesPaid = ytdTaxesPaid;
         this.pretaxDeductions = pretaxDeductions;
@@ -19,17 +22,17 @@ public class SalaryEmployee implements IEmployee {
 
     @Override
     public String getName() {
-        return name;
+        return this.name;
     }
 
     @Override
     public String getID() {
-        return id;
+        return this.id;
     }
 
     @Override
     public double getPayRate() {
-        return annualSalary;
+        return this.payRate;
     }
 
     @Override
@@ -39,43 +42,42 @@ public class SalaryEmployee implements IEmployee {
 
     @Override
     public double getYTDEarnings() {
-        return ytdEarnings;
+        return this.ytdEarnings;
     }
 
     @Override
     public double getYTDTaxesPaid() {
-        return ytdTaxesPaid;
+        return this.ytdTaxesPaid;
     }
 
     @Override
     public double getPretaxDeductions() {
-        return pretaxDeductions;
+        return this.pretaxDeductions;
     }
 
     @Override
     public IPayStub runPayroll(double hoursWorked) {
-        double biMonthlySalary = annualSalary / 24;
-        double taxableIncome = biMonthlySalary - pretaxDeductions;
+        if (hoursWorked < 0) return null;  // Skip invalid entries
 
-        // Ensure taxable income is not negative
-        if (taxableIncome < 0) {
-            taxableIncome = 0;
-        }
+        double grossPay = payRate / 24;  // Bi-monthly salary
 
-        double taxesPaid = taxableIncome * 0.2265;
-        double netPay = Math.max(0, taxableIncome - taxesPaid); // Ensure netPay is non-negative
+        double taxableIncome = Math.max(0, grossPay - pretaxDeductions);
+        double taxes = taxableIncome * 0.2265;  // 22.65% tax rate
+        double netPay = taxableIncome - taxes;
 
-        // Update YTD values
-        ytdEarnings += biMonthlySalary;
-        ytdTaxesPaid += taxesPaid;
+        // Round to 2 decimal places
+        BigDecimal netPayRounded = BigDecimal.valueOf(netPay).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal taxesRounded = BigDecimal.valueOf(taxes).setScale(2, RoundingMode.HALF_UP);
 
-        return new PayStub(name, netPay, taxesPaid, ytdEarnings, ytdTaxesPaid);
+        // Update YTD earnings and taxes
+        ytdEarnings += netPayRounded.doubleValue();
+        ytdTaxesPaid += taxesRounded.doubleValue();
+
+        return new PayStub(name, id, netPayRounded.doubleValue(), taxesRounded.doubleValue(), ytdEarnings, ytdTaxesPaid);
     }
-
 
     @Override
     public String toCSV() {
-        return String.format("%s,%s,%s,%.2f,%.2f,%.2f,%.2f",
-                getEmployeeType(), name, id, annualSalary, pretaxDeductions, ytdEarnings, ytdTaxesPaid);
+        return String.format("SALARY,%s,%s,%.2f,%.2f,%.2f,%.2f", name, id, payRate, pretaxDeductions, ytdEarnings, ytdTaxesPaid);
     }
 }

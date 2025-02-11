@@ -118,6 +118,88 @@ You should feel free to number your brainstorm.
 ## (FINAL DESIGN): Class Diagram
 
 Go through your completed code, and update your class diagram to reflect the final design. Make sure you check the file in the browser on github.com to make sure it is rendering correctly. It is normal that the two diagrams don't match! Rarely (though possible) is your initial design perfect. 
+```mermaid
+---
+title: Final Class Diagram
+---
+classDiagram
+class IEmployee {
++String getName()
++String getID()
++double getPayRate()
++String getEmployeeType()
++double getYTDEarnings()
++double getYTDTaxesPaid()
++double getPretaxDeductions()
++IPayStub runPayroll(double hoursWorked)
++String toCSV()
+}
+
+class IPayStub {
++double getPay()
++double getTaxesPaid()
++String toCSV()
+}
+
+class ITimeCard {
++String getEmployeeID()
++double getHoursWorked()
++static fromCSV(String csv)
+}
+
+class HourlyEmployee {
+-String name
+-String id
+-double payRate
+-double ytdEarnings
+-double ytdTaxesPaid
+-double pretaxDeductions
++runPayroll(double hoursWorked)
++toCSV()
+}
+
+class SalaryEmployee {
+-String name
+-String id
+-double payRate
+-double ytdEarnings
+-double ytdTaxesPaid
+-double pretaxDeductions
++runPayroll(double hoursWorked)
++toCSV()
+}
+
+class PayStub {
+-String employeeName
+-String employeeId
+-double netPay
+-double taxesPaid
+-double ytdEarnings
+-double ytdTaxesPaid
++toCSV()
+}
+
+class Builder {
++IEmployee buildEmployeeFromCSV(String csv)
++ITimeCard buildTimeCardFromCSV(String csv)
+}
+
+class PayrollGenerator {
++main(String[] args)
+}
+
+IEmployee <|-- HourlyEmployee
+IEmployee <|-- SalaryEmployee
+IPayStub <|-- PayStub
+ITimeCard <|-- TimeCard
+HourlyEmployee --> PayStub
+SalaryEmployee --> PayStub
+Builder --> IEmployee
+Builder --> ITimeCard
+PayrollGenerator --> IEmployee
+PayrollGenerator --> IPayStub
+PayrollGenerator --> ITimeCard
+```
 
 > [!WARNING]
 > If you resubmit your assignment for manual grading, this is a section that often needs updating. You should double check with every resubmit to make sure it is up to date.
@@ -132,3 +214,6 @@ Go through your completed code, and update your class diagram to reflect the fin
 > The value of reflective writing has been highly researched and documented within computer science, from learning new information to showing higher salaries in the workplace. For this next part, we encourage you to take time, and truly focus on your retrospective.
 
 Take time to reflect on how your design has changed. Write in *prose* (i.e. do not bullet point your answers - it matters in how our brain processes the information). Make sure to include what were some major changes, and why you made them. What did you learn from this process? What would you do differently next time? What was the most challenging part of this process? For most students, it will be a paragraph or two. 
+
+      One of the most challenging parts of this project was debugging discrepancies between expected and actual outputs in the TestPayrollGenerator.   Issues like hidden characters and line-ending mismatches taught me the importance of data normalization when comparing large datasets.   Additionally, managing file paths and ensuring cross-platform compatibility was a learning curve, especially when working with temporary directories during testing.
+      I think I was a little struggling with the interlocking of multiple objects, and although I finally tried to tidy them up to make them look more logical, I went through a lot of rework in between. I hope that as I gain more experience, I will be able to handle projects with ease

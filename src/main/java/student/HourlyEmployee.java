@@ -1,5 +1,8 @@
 package student;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class HourlyEmployee implements IEmployee {
     private String name;
     private String id;
@@ -19,17 +22,17 @@ public class HourlyEmployee implements IEmployee {
 
     @Override
     public String getName() {
-        return name;
+        return this.name;
     }
 
     @Override
     public String getID() {
-        return id;
+        return this.id;
     }
 
     @Override
     public double getPayRate() {
-        return payRate;
+        return this.payRate;
     }
 
     @Override
@@ -39,43 +42,47 @@ public class HourlyEmployee implements IEmployee {
 
     @Override
     public double getYTDEarnings() {
-        return ytdEarnings;
+        return this.ytdEarnings;
     }
 
     @Override
     public double getYTDTaxesPaid() {
-        return ytdTaxesPaid;
+        return this.ytdTaxesPaid;
     }
 
     @Override
     public double getPretaxDeductions() {
-        return pretaxDeductions;
+        return this.pretaxDeductions;
     }
 
     @Override
     public IPayStub runPayroll(double hoursWorked) {
-        if (hoursWorked < 0) return null;
+        if (hoursWorked < 0) return null;  // Skip invalid entries
 
-        double regularHours = Math.min(40, hoursWorked);
-        double overtimeHours = Math.max(0, hoursWorked - 40);
+        double grossPay;
+        if (hoursWorked > 40) {
+            grossPay = (40 * payRate) + ((hoursWorked - 40) * payRate * 1.5);  // Overtime calculation
+        } else {
+            grossPay = hoursWorked * payRate;
+        }
 
-        double regularPay = regularHours * payRate;
-        double overtimePay = overtimeHours * payRate * 1.5;
+        double taxableIncome = Math.max(0, grossPay - pretaxDeductions);  // Prevent negative taxable income
+        double taxes = taxableIncome * 0.2265;  // 22.65% tax rate
+        double netPay = taxableIncome - taxes;
 
-        double grossPay = regularPay + overtimePay;
-        double taxesPaid = grossPay * 0.2265;
-        double netPay = grossPay - taxesPaid;
+        // Round to 2 decimal places
+        BigDecimal netPayRounded = BigDecimal.valueOf(netPay).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal taxesRounded = BigDecimal.valueOf(taxes).setScale(2, RoundingMode.HALF_UP);
 
-        // Update YTD values
-        ytdEarnings += grossPay;
-        ytdTaxesPaid += taxesPaid;
+        // Update YTD earnings and taxes
+        ytdEarnings += netPayRounded.doubleValue();
+        ytdTaxesPaid += taxesRounded.doubleValue();
 
-        return new PayStub(name, netPay, taxesPaid, ytdEarnings, ytdTaxesPaid);
+        return new PayStub(name, id, netPayRounded.doubleValue(), taxesRounded.doubleValue(), ytdEarnings, ytdTaxesPaid);
     }
 
     @Override
     public String toCSV() {
-        return String.format("%s,%s,%s,%.2f,%.2f,%.2f,%.2f",
-                getEmployeeType(), name, id, payRate, pretaxDeductions, ytdEarnings, ytdTaxesPaid);
+        return String.format("HOURLY,%s,%s,%.2f,%.2f,%.2f,%.2f", name, id, payRate, pretaxDeductions, ytdEarnings, ytdTaxesPaid);
     }
 }

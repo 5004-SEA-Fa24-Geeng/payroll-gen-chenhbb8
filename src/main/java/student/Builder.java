@@ -52,38 +52,12 @@ public final class Builder {
     }
 
     /**
-     * Converts a TimeCard from a CSV String.
+     * Converts a TimeCard from a CSV String using ITimeCard's fromCSV method.
      *
      * @param csv csv string
      * @return a TimeCard object
      */
     public static ITimeCard buildTimeCardFromCSV(String csv) {
-        String[] parts = csv.split(",");
-
-        // Validate that the CSV has exactly 2 fields
-        if (parts.length != 2) {
-            return null;
-        }
-
-        String employeeID = parts[0];
-
-        try {
-            double hoursWorked = Double.parseDouble(parts[1]);
-
-            // Create an anonymous implementation of ITimeCard
-            return new ITimeCard() {
-                @Override
-                public String getEmployeeID() {
-                    return employeeID;
-                }
-
-                @Override
-                public double getHoursWorked() {
-                    return hoursWorked;
-                }
-            };
-        } catch (NumberFormatException e) {
-            return null; // Invalid numeric format
-        }
+        return ITimeCard.fromCSV(csv); // Simplified using the static method in ITimeCard
     }
 }

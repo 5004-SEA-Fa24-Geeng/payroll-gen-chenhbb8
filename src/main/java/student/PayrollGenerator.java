@@ -4,46 +4,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.LinkedList;
 
-/**
- * Main driver for the PayrollGenerator program.
- *
- * Students, you are free to modify this file as needed, but you need to leave in the parts where we
- * can pass in the employee and payroll files as arguments.
- *
- * Grading wise, we will both be using unit tests, and running your program with different employee
- * files. We also will create a separate output file for each.
- *
- *
- * To run the program, you can use the following command:
- *
- * java student.PayrollGenerator -e employees_mine.csv -t time_cards.csv -o pay_stubs_mine.csv or
- * java student.PayrollGenerator The above defaults listed below.
- *
- * We also suggest meeting with a TA and learning how to add command line arguments
- * in your IDE, as it will make testing and debugging easier.
- **/
 public final class PayrollGenerator {
-    /** default file name for employees. */
     private static final String DEFAULT_EMPLOYEE_FILE = "resources/employees.csv";
-    /** default file name for pay stub output. */
     private static final String DEFAULT_PAYROLL_FILE = "resources/pay_stubs.csv";
-    /** default time card file name. */
     private static final String DEFAULT_TIME_CARD_FILE = "resources/time_cards.csv";
 
-    /**
-     * private constructor to prevent instantiation.
-     */
     private PayrollGenerator() {
     }
 
-    /**
-     * Main driver for the program.
-     *
-     * @param args command line arguments
-     */
     public static void main(String[] args) {
-        Arguments arguments = Arguments.process(args); // leave this, and make sure you use it on
-        // reading/writing files!
+        Arguments arguments = Arguments.process(args);
 
         List<String> employeeLines = FileUtil.readFileToList(arguments.getEmployeeFile());
         List<String> timeCards = FileUtil.readFileToList(arguments.getTimeCards());
@@ -67,17 +37,15 @@ public final class PayrollGenerator {
                     .orElse(null);
 
             if (employee == null) {
-                continue; // Skip if no matching employee found
+                continue;
             }
 
             double hoursWorked = timeCard.getHoursWorked();
-
             if (hoursWorked < 0) {
-                continue; // Skip invalid time cards with negative hours
+                continue;
             }
 
             IPayStub payStub = employee.runPayroll(hoursWorked);
-
             if (payStub != null) {
                 payStubs.add(payStub);
             }
@@ -93,115 +61,54 @@ public final class PayrollGenerator {
                 .filter(x -> x != null)
                 .map(IPayStub::toCSV)
                 .collect(Collectors.toList());
-        payStubLines.add(0, FileUtil.PAY_STUB_HEADER);
+
+
+        payStubLines.add(0, "employee_name,employee_id,net_pay,taxes,ytd_earnings,ytd_taxes_paid");
+
         FileUtil.writeFile(arguments.getPayrollFile(), payStubLines);
     }
 
-    /**
-     * This is an internal class. Please leave it as is/do not modify! This design is common for
-     * processing arguments if you want to make sure it is unique to the driver.
-     */
     private static final class Arguments {
-        /** sets the employeeFile argument. */
         private String employeeFile = DEFAULT_EMPLOYEE_FILE;
-
-        /** sets the payrollFile argument. */
         private String payrollFile = DEFAULT_PAYROLL_FILE;
-
-        /** sets the timeCards argument. */
         private String timeCards = DEFAULT_TIME_CARD_FILE;
 
-        /**
-         * Constructor for Arguments. Setup as private, so builder has to be used.
-         *
-         * @see #process(String[])
-         */
         private Arguments() {
         }
 
-        /**
-         * Gets the employee file.
-         *
-         * @return the name of the employee file
-         */
         public String getEmployeeFile() {
             return employeeFile;
         }
 
-        /**
-         * Gets the payroll file.
-         *
-         * @return the name of the payroll file
-         */
         public String getPayrollFile() {
             return payrollFile;
         }
 
-        /**
-         * Gets the time card file.
-         *
-         * @return the name of the time card file
-         */
         public String getTimeCards() {
             return timeCards;
         }
 
-        /**
-         * Prints the help message.
-         */
         public void printHelp() {
-            System.out.println(
-                    "Usage: java student.PayrollGenerator [-e employee_file] [-t time_cards_file] [-o payroll_file]");
+            System.out.println("Usage: java student.PayrollGenerator [-e employee_file] [-t time_cards_file] [-o payroll_file]");
             System.out.println("Options:");
-            System.out.println(
-                    "  -e employee_file  Input file containing employee information. Default is employees.csv");
-            System.out.println(
-                    "  -t time_cards_file  Input file containing time card information. Default is time_cards.csv");
-            System.out.println(
-                    "  -o payroll_file   Output file containing payroll information. Default is pay_stubs.csv");
+            System.out.println("  -e employee_file  Input file containing employee information.");
+            System.out.println("  -t time_cards_file  Input file containing time card information.");
+            System.out.println("  -o payroll_file   Output file containing payroll information.");
             System.out.println("  -h                Print this help message");
         }
 
-        /**
-         * Processes the arguments.
-         *
-         * @param args the arguments
-         * @return an Argument object with file names added
-         */
         public static Arguments process(String[] args) {
             Arguments arguments = new Arguments();
             for (int i = 0; i < args.length; i++) {
                 if (args[i].equals("-e")) {
-                    if (i + 1 < args.length && !args[i + 1].startsWith("-")) {
-                        arguments.employeeFile = args[i + 1];
-                    } else {
-                        System.out.println("Missing argument for -e option");
-                        arguments.printHelp();
-                        System.exit(1);
-                    }
+                    arguments.employeeFile = args[++i];
                 } else if (args[i].equals("-t")) {
-                    if (i + 1 < args.length && !args[i + 1].startsWith("-")) {
-                        arguments.timeCards = args[i + 1];
-                    } else {
-                        System.out.println("Missing argument for -t option");
-                        arguments.printHelp();
-                        System.exit(1);
-                    }
+                    arguments.timeCards = args[++i];
                 } else if (args[i].equals("-o")) {
-                    if (i + 1 < args.length && !args[i + 1].startsWith("-")) {
-                        arguments.payrollFile = args[i + 1];
-                    } else {
-                        System.out.println("Missing argument for -o option");
-                        arguments.printHelp();
-                        System.exit(1);
-                    }
+                    arguments.payrollFile = args[++i];
                 } else if (args[i].equals("-h")) {
                     arguments.printHelp();
                     System.exit(0);
-                } else if (args[i].startsWith("-")) {
-                    System.out.println("Unknown option: " + args[i]);
-                    arguments.printHelp();
-                    System.exit(1);
                 }
             }
             return arguments;

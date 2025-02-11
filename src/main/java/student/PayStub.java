@@ -1,18 +1,18 @@
 package student;
 
 public class PayStub implements IPayStub {
-    private String employeeName;
-    private String employeeID;
-    private double netPay;
-    private double taxes;
-    private double ytdEarnings;
-    private double ytdTaxesPaid;
+    private final String employeeName;
+    private final String employeeId;
+    private final double netPay;
+    private final double taxesPaid;
+    private final double ytdEarnings;
+    private final double ytdTaxesPaid;
 
-    public PayStub(String employeeName, String employeeID, double netPay, double taxes, double ytdEarnings, double ytdTaxesPaid) {
+    public PayStub(String employeeName, String employeeId, double netPay, double taxesPaid, double ytdEarnings, double ytdTaxesPaid) {
         this.employeeName = employeeName;
-        this.employeeID = employeeID;
+        this.employeeId = employeeId;
         this.netPay = netPay;
-        this.taxes = taxes;
+        this.taxesPaid = taxesPaid;
         this.ytdEarnings = ytdEarnings;
         this.ytdTaxesPaid = ytdTaxesPaid;
     }
@@ -24,11 +24,12 @@ public class PayStub implements IPayStub {
 
     @Override
     public double getTaxesPaid() {
-        return taxes;
+        return taxesPaid;
     }
 
     @Override
     public String toCSV() {
-        return String.format("%s,%s,%.2f,%.2f,%.2f,%.2f", employeeName, employeeID, netPay, taxesPaid, ytdEarnings, ytdTaxesPaid);
+        return String.format("%s,%s,%.2f,%.2f,%.2f,%.2f",
+                employeeName, employeeId, netPay, taxesPaid, ytdEarnings, ytdTaxesPaid);
     }
 }
