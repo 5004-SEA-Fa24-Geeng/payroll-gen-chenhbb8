@@ -44,9 +44,9 @@ public class PayStub implements IPayStub {
     }
 
     /**
-     * Gets the net pay for the employee.
+     * Gets the employee's net pay.
      *
-     * @return The employee's net pay
+     * @return The net pay amount
      */
     @Override
     public double getPay() {
@@ -54,9 +54,9 @@ public class PayStub implements IPayStub {
     }
 
     /**
-     * Gets the taxes paid by the employee.
+     * Gets the amount of taxes paid by the employee.
      *
-     * @return The amount of taxes paid
+     * @return The taxes paid
      */
     @Override
     public double getTaxesPaid() {
@@ -64,7 +64,7 @@ public class PayStub implements IPayStub {
     }
 
     /**
-     * Converts pay stub details to a CSV format.
+     * Converts pay stub details to CSV format.
      *
      * @return A CSV string representing the pay stub
      */

@@ -17,13 +17,13 @@ public class SalaryEmployee implements IEmployee {
     /** The employee's annual salary. */
     private double payRate;
 
-    /** Year-to-date earnings for the employee. */
+    /** The employee's year-to-date earnings. */
     private double ytdEarnings;
 
-    /** Year-to-date taxes paid by the employee. */
+    /** The employee's year-to-date taxes paid. */
     private double ytdTaxesPaid;
 
-    /** Pretax deductions for the employee. */
+    /** The employee's pretax deductions. */
     private double pretaxDeductions;
 
     /**
@@ -90,28 +90,28 @@ public class SalaryEmployee implements IEmployee {
     @Override
     public IPayStub runPayroll(double hoursWorked) {
         if (hoursWorked < 0) {
-            return null;  // Skip invalid entries
+            return null;
         }
 
         double grossPay = payRate / 24;  // Bi-monthly salary
         double taxableIncome = Math.max(0, grossPay - pretaxDeductions);
-        double taxes = taxableIncome * 0.2265;  // 22.65% tax rate
+        double taxes = taxableIncome * 0.2265;  // Correct tax rate
         double netPay = taxableIncome - taxes;
 
-        // Round to 2 decimal places
-        BigDecimal netPayRounded = BigDecimal.valueOf(netPay).setScale(2, RoundingMode.HALF_UP);
-        BigDecimal taxesRounded = BigDecimal.valueOf(taxes).setScale(2, RoundingMode.HALF_UP);
+        // Ensure accurate rounding
+        netPay = Math.round(netPay * 100.0) / 100.0;
+        taxes = Math.round(taxes * 100.0) / 100.0;
 
-        // Update YTD earnings and taxes
-        ytdEarnings += netPayRounded.doubleValue();
-        ytdTaxesPaid += taxesRounded.doubleValue();
+        // Correct YTD calculation: add grossPay instead of netPay
+        ytdEarnings += grossPay;
+        ytdTaxesPaid += taxes;
 
-        return new PayStub(name, id, netPayRounded.doubleValue(),
-                taxesRounded.doubleValue(), ytdEarnings, ytdTaxesPaid);
+        return new PayStub(name, id, netPay, taxes, ytdEarnings, ytdTaxesPaid);
     }
 
+
     /**
-     * Converts employee data to CSV format.
+     * Converts employee details to CSV format.
      *
      * @return A CSV string representing the employee
      */

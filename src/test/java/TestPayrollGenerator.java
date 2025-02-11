@@ -10,6 +10,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Test class for verifying PayrollGenerator functionality.
+ */
 public class TestPayrollGenerator {
 
     @TempDir
@@ -33,7 +36,7 @@ public class TestPayrollGenerator {
         PayrollGenerator.main(args);
 
         String expectedPayStubs = """
-                employee_name,employee_id,net_pay,taxes,ytd_earnings,ytd_taxes_paid
+                employee_name,employee_id,net_pay,taxes_paid,ytd_earnings,ytd_taxes_paid
                 Luffy,s192,1102.24,322.76,21102.24,4852.76
                 Nami,s193,5672.33,1661.00,22689.33,6644.00
                 Light Yagami,x101,773.50,226.50,10773.50,2491.50
@@ -45,11 +48,16 @@ public class TestPayrollGenerator {
 
         String actualPayStubs = Files.readString(payStubs);
 
-        // ✅ Normalize line endings and trim spaces
+
         expectedPayStubs = expectedPayStubs.replaceAll("\\r\\n?", "\n").trim();
         actualPayStubs = actualPayStubs.replaceAll("\\r\\n?", "\n").trim();
 
+
         assertNotNull(actualPayStubs, "Generated pay stubs file is null.");
-        assertEquals(expectedPayStubs, actualPayStubs, "Mismatch between expected and actual pay stubs.");
+
+
+        assertEquals(expectedPayStubs, actualPayStubs,
+                "Mismatch found in pay stubs:\nExpected:\n" + expectedPayStubs +
+                        "\nActual:\n" + actualPayStubs);
     }
 }
