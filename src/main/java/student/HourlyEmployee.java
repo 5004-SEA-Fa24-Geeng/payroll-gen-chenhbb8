@@ -3,15 +3,41 @@ package student;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+/**
+ * Represents an hourly employee with pay and tax details.
+ */
 public class HourlyEmployee implements IEmployee {
+
+    /** The employee's name. */
     private String name;
+
+    /** The employee's ID. */
     private String id;
+
+    /** The hourly pay rate. */
     private double payRate;
+
+    /** Year-to-date earnings of the employee. */
     private double ytdEarnings;
+
+    /** Year-to-date taxes paid by the employee. */
     private double ytdTaxesPaid;
+
+    /** Pretax deductions for the employee. */
     private double pretaxDeductions;
 
-    public HourlyEmployee(String name, String id, double payRate, double ytdEarnings, double ytdTaxesPaid, double pretaxDeductions) {
+    /**
+     * Constructs an HourlyEmployee with the given details.
+     *
+     * @param name              The employee's name
+     * @param id                The employee's ID
+     * @param payRate           The employee's hourly pay rate
+     * @param ytdEarnings       Year-to-date earnings
+     * @param ytdTaxesPaid      Year-to-date taxes paid
+     * @param pretaxDeductions  Pretax deductions
+     */
+    public HourlyEmployee(String name, String id, double payRate, double ytdEarnings,
+                          double ytdTaxesPaid, double pretaxDeductions) {
         this.name = name;
         this.id = id;
         this.payRate = payRate;
@@ -55,9 +81,17 @@ public class HourlyEmployee implements IEmployee {
         return this.pretaxDeductions;
     }
 
+    /**
+     * Calculates the payroll based on hours worked.
+     *
+     * @param hoursWorked Number of hours worked
+     * @return The generated pay stub
+     */
     @Override
     public IPayStub runPayroll(double hoursWorked) {
-        if (hoursWorked < 0) return null;  // Skip invalid entries
+        if (hoursWorked < 0) {
+            return null;  // Skip invalid entries
+        }
 
         double grossPay;
         if (hoursWorked > 40) {
@@ -78,11 +112,18 @@ public class HourlyEmployee implements IEmployee {
         ytdEarnings += netPayRounded.doubleValue();
         ytdTaxesPaid += taxesRounded.doubleValue();
 
-        return new PayStub(name, id, netPayRounded.doubleValue(), taxesRounded.doubleValue(), ytdEarnings, ytdTaxesPaid);
+        return new PayStub(name, id, netPayRounded.doubleValue(),
+                taxesRounded.doubleValue(), ytdEarnings, ytdTaxesPaid);
     }
 
+    /**
+     * Converts employee details to a CSV format.
+     *
+     * @return A CSV string representing the employee
+     */
     @Override
     public String toCSV() {
-        return String.format("HOURLY,%s,%s,%.2f,%.2f,%.2f,%.2f", name, id, payRate, pretaxDeductions, ytdEarnings, ytdTaxesPaid);
+        return String.format("HOURLY,%s,%s,%.2f,%.2f,%.2f,%.2f",
+                name, id, payRate, pretaxDeductions, ytdEarnings, ytdTaxesPaid);
     }
 }

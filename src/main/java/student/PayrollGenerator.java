@@ -4,14 +4,31 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.LinkedList;
 
+/**
+ * Main driver for generating payroll and pay stubs.
+ */
 public final class PayrollGenerator {
+
+    /** Default file name for employee data. */
     private static final String DEFAULT_EMPLOYEE_FILE = "resources/employees.csv";
+
+    /** Default file name for payroll output. */
     private static final String DEFAULT_PAYROLL_FILE = "resources/pay_stubs.csv";
+
+    /** Default file name for time card data. */
     private static final String DEFAULT_TIME_CARD_FILE = "resources/time_cards.csv";
 
+    /**
+     * Private constructor to prevent instantiation.
+     */
     private PayrollGenerator() {
     }
 
+    /**
+     * Main method to execute the payroll process.
+     *
+     * @param args Command-line arguments for file inputs and outputs
+     */
     public static void main(String[] args) {
         Arguments arguments = Arguments.process(args);
 
@@ -62,41 +79,78 @@ public final class PayrollGenerator {
                 .map(IPayStub::toCSV)
                 .collect(Collectors.toList());
 
-
+        // Add CSV header
         payStubLines.add(0, "employee_name,employee_id,net_pay,taxes,ytd_earnings,ytd_taxes_paid");
 
         FileUtil.writeFile(arguments.getPayrollFile(), payStubLines);
     }
 
+    /**
+     * Handles command-line arguments for file paths.
+     */
     private static final class Arguments {
+
+        /** File containing employee data. */
         private String employeeFile = DEFAULT_EMPLOYEE_FILE;
+
+        /** File for payroll output. */
         private String payrollFile = DEFAULT_PAYROLL_FILE;
+
+        /** File containing time card data. */
         private String timeCards = DEFAULT_TIME_CARD_FILE;
 
+        /**
+         * Private constructor for internal use.
+         */
         private Arguments() {
         }
 
+        /**
+         * Gets the employee file path.
+         *
+         * @return Path to the employee file
+         */
         public String getEmployeeFile() {
             return employeeFile;
         }
 
+        /**
+         * Gets the payroll output file path.
+         *
+         * @return Path to the payroll file
+         */
         public String getPayrollFile() {
             return payrollFile;
         }
 
+        /**
+         * Gets the time card file path.
+         *
+         * @return Path to the time cards file
+         */
         public String getTimeCards() {
             return timeCards;
         }
 
+        /**
+         * Prints help message for using the program.
+         */
         public void printHelp() {
-            System.out.println("Usage: java student.PayrollGenerator [-e employee_file] [-t time_cards_file] [-o payroll_file]");
+            System.out.println("Usage: java student.PayrollGenerator "
+                    + "[-e employee_file] [-t time_cards_file] [-o payroll_file]");
             System.out.println("Options:");
-            System.out.println("  -e employee_file  Input file containing employee information.");
-            System.out.println("  -t time_cards_file  Input file containing time card information.");
-            System.out.println("  -o payroll_file   Output file containing payroll information.");
-            System.out.println("  -h                Print this help message");
+            System.out.println("  -e employee_file   Input file containing employee information.");
+            System.out.println("  -t time_cards_file Input file containing time card information.");
+            System.out.println("  -o payroll_file    Output file containing payroll information.");
+            System.out.println("  -h                 Print this help message.");
         }
 
+        /**
+         * Processes command-line arguments.
+         *
+         * @param args Command-line arguments
+         * @return Processed Arguments object
+         */
         public static Arguments process(String[] args) {
             Arguments arguments = new Arguments();
             for (int i = 0; i < args.length; i++) {
